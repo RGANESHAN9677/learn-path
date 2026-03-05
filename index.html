@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LearnPath — Goal Roadmap & Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════ TOKENS ═══════ */
+:root{
+  --bg:#07090f;--surface:#0d1018;--card:#111520;--card2:#161c2a;
+  --border:#1e2535;--border2:#252f45;
+  --teal:#00d4aa;--teal-dk:#00a882;--teal-glow:rgba(0,212,170,.2);
+  --amber:#f5a623;--amber-glow:rgba(245,166,35,.2);
+  --rose:#ff5c7a;--sky:#4ca8ff;--violet:#9b6fff;
+  --text:#e8ecf5;--muted:#5e6e8a;--muted2:#3a4560;
+  --ff-h:'Syne',sans-serif;--ff-b:'Nunito',sans-serif;
+  --r:10px;--r-lg:18px;--r-xl:26px;
+  --sh:0 8px 32px rgba(0,0,0,.5);--sh-t:0 6px 24px rgba(0,212,170,.25);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--teal);border-radius:4px}
+
+/* ═══════ BG EFFECTS ═══════ */
+.bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-fx::before{content:'';position:absolute;width:800px;height:800px;
+  background:radial-gradient(circle,rgba(0,212,170,.07) 0%,transparent 60%);
+  top:-300px;right:-200px;animation:drift 16s ease-in-out infinite alternate}
+.bg-fx::after{content:'';position:absolute;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(155,111,255,.07) 0%,transparent 60%);
+  bottom:-200px;left:-100px;animation:drift 20s ease-in-out infinite alternate-reverse}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,-40px) scale(1.1)}}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:52px 52px}
+
+/* ═══════ PAGES ═══════ */
+.pg{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;
+  padding:20px;overflow-y:auto}
+.pg.on{display:flex;animation:pgIn .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes pgIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ═══════ APP SHELL ═══════ */
+#pg-app{position:fixed;inset:0;z-index:10;display:none;flex-direction:row}
+#pg-app.on{display:flex}
+
+/* Sidebar */
+.sidebar{
+  width:230px;flex-shrink:0;background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:relative;z-index:20
+}
+.sb-logo{padding:24px 20px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px}
+.sb-mark{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--teal),#00b894);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:var(--sh-t)}
+.sb-name{font-family:var(--ff-h);font-size:1.15rem;font-weight:900;color:var(--text)}
+.sb-name em{color:var(--teal);font-style:normal}
+.sb-nav{flex:1;padding:14px 10px;overflow-y:auto}
+.sb-section{font-size:.65rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--muted2);padding:12px 10px 6px}
+.sb-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border-radius:var(--r);color:var(--muted);font-size:.86rem;font-weight:600;
+  cursor:pointer;transition:all .18s;border:none;background:none;
+  width:100%;text-align:left;margin-bottom:2px;font-family:var(--ff-b)
+}
+.sb-item:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.sb-item.active{background:rgba(0,212,170,.12);color:var(--teal)}
+.sb-item .si{font-size:15px;width:20px;text-align:center}
+.sb-badge{margin-left:auto;background:var(--teal);color:var(--bg);
+  font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:20px}
+.sb-foot{padding:14px 10px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:8px 10px;
+  border-radius:var(--r);cursor:pointer;transition:background .18s}
+.sb-user:hover{background:rgba(255,255,255,.05)}
+.sb-av{width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),var(--violet));
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--bg);flex-shrink:0}
+.sb-uname{font-size:.82rem;font-weight:700;color:var(--text)}
+.sb-urole{font-size:.7rem;color:var(--muted)}
+
+/* Main area */
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 28px;gap:14px;flex-shrink:0}
+.topbar-title{font-family:var(--ff-h);font-size:1.05rem;font-weight:800;color:var(--text)}
+.tb-search{flex:1;max-width:280px;margin-left:auto;
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:0 12px}
+.tb-search input{border:none;background:none;outline:none;font-family:var(--ff-b);
+  font-size:.83rem;color:var(--text);width:100%;padding:9px 0}
+.tb-search input::placeholder{color:var(--muted2)}
+.tb-btn{width:36px;height:36px;border-radius:var(--r);border:1px solid var(--border);
+  background:var(--card);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:15px;transition:all .18s;flex-shrink:0}
+.tb-btn:hover{border-color:var(--teal);background:rgba(0,212,170,.08)}
+
+/* App pages */
+.ap{flex:1;overflow-y:auto;display:none;padding:28px}
+.ap.on{display:block;animation:pgIn .35s ease both}
+
+/* ═══════ AUTH CARD ═══════ */
+.auth-wrap{width:100%;max-width:450px;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.brand-mark{width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--teal),#00b894);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  box-shadow:var(--sh-t)}
+.brand-name{font-family:var(--ff-h);font-size:1.3rem;font-weight:900;color:var(--text)}
+.brand-name em{color:var(--teal);font-style:normal}
+.auth-card{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:38px;box-shadow:var(--sh)}
+.tab-bar{display:flex;background:var(--surface);border-radius:var(--r);
+  border:1px solid var(--border);padding:4px;margin-bottom:28px}
+.tab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);
+  font-family:var(--ff-b);font-size:.88rem;font-weight:700;border-radius:8px;
+  cursor:pointer;transition:all .22s}
+.tab.on{background:var(--card2);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.apanel{display:none}
+.apanel.on{display:block;animation:pgIn .3s ease both}
+.ptitle{font-family:var(--ff-h);font-size:1.75rem;font-weight:900;margin-bottom:6px;
+  letter-spacing:-.5px;line-height:1.15}
+.ptitle em{color:var(--teal);font-style:normal}
+.psub{color:var(--muted);font-size:.87rem;margin-bottom:26px;line-height:1.65}
+.ig{margin-bottom:16px}
+.ig label{display:block;font-size:.72rem;font-weight:800;color:var(--muted);
+  margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
+.irow{position:relative;display:flex;align-items:center}
+.ii{position:absolute;left:13px;font-size:14px;color:var(--muted2);pointer-events:none;transition:color .2s}
+.irow input{width:100%;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:12px 14px 12px 40px;
+  color:var(--text);font-family:var(--ff-b);font-size:.9rem;outline:none;transition:all .2s}
+.irow input:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow);background:rgba(0,212,170,.03)}
+.irow input::placeholder{color:var(--muted2)}
+.irow input:focus~.ii,.irow input:focus+.ii{color:var(--teal)}
+.pw-eye{position:absolute;right:11px;background:none;border:none;color:var(--muted);
+  cursor:pointer;font-size:14px;padding:4px;border-radius:6px;transition:color .2s}
+.pw-eye:hover{color:var(--teal)}
+.err{font-size:.72rem;color:var(--rose);margin-top:4px;display:none}
+.err.on{display:block}
+.str-bars{display:flex;gap:3px;margin-top:6px}
+.sseg{flex:1;height:3px;border-radius:3px;background:var(--border);transition:background .3s}
+.str-lbl{font-size:.7rem;color:var(--muted);margin-top:3px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:20px}
+.check-row input[type=checkbox]{accent-color:var(--teal);width:15px;height:15px;margin-top:2px;flex-shrink:0}
+.check-row label{font-size:.8rem;color:var(--muted);cursor:pointer;line-height:1.6}
+.check-row label a{color:var(--teal);text-decoration:none}
+.between{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.between label{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--muted);cursor:pointer}
+.between label input[type=checkbox]{accent-color:var(--teal)}
+.alink,.alink button{font-size:.8rem;color:var(--teal);text-decoration:none;font-weight:600;
+  background:none;border:none;cursor:pointer;font-family:var(--ff-b);transition:opacity .18s}
+.alink:hover,.alink button:hover{opacity:.72}
+.divider{display:flex;align-items:center;gap:10px;margin:20px 0;color:var(--muted2);font-size:.75rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.social-row{display:flex;gap:10px}
+.btn-social{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px;border:1.5px solid var(--border);border-radius:var(--r);
+  background:var(--surface);color:var(--text);font-family:var(--ff-b);
+  font-size:.8rem;font-weight:700;cursor:pointer;transition:all .18s}
+.btn-social:hover{border-color:var(--teal);background:rgba(0,212,170,.07);transform:translateY(-1px)}
+.btn-social svg{width:16px;height:16px;flex-shrink:0}
+
+/* ═══════ BUTTONS ═══════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 22px;border-radius:var(--r);font-family:var(--ff-b);font-size:.88rem;
+  font-weight:700;cursor:pointer;border:none;transition:all .2s;letter-spacing:.1px}
+.btn-full{width:100%}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#00c49a);color:var(--bg);box-shadow:var(--sh-t)}
+.btn-teal:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,212,170,.38)}
+.btn-teal:active{transform:translateY(0)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-sm{padding:7px 14px;font-size:.78rem}
+
+/* ═══════ GOAL PAGE ═══════ */
+.goal-wrap{width:100%;max-width:580px;position:relative;z-index:1;padding:20px 0}
+.goal-card{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:44px 40px;box-shadow:var(--sh)}
+.g-eyebrow{font-size:.68rem;font-weight:800;color:var(--teal);
+  text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px}
+.g-title{font-family:var(--ff-h);font-size:2.2rem;font-weight:900;
+  line-height:1.1;margin-bottom:12px}
+.g-title em{color:var(--teal);font-style:normal}
+.g-sub{color:var(--muted);font-size:.9rem;line-height:1.7;margin-bottom:28px}
+.goal-box{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-lg);
+  padding:18px;transition:all .25s;margin-bottom:18px;position:relative}
+.goal-box:focus-within{border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-glow)}
+.goal-ta{width:100%;background:none;border:none;outline:none;
+  color:var(--text);font-family:var(--ff-b);font-size:.97rem;
+  resize:none;line-height:1.7;min-height:76px}
+.goal-ta::placeholder{color:var(--muted2)}
+.g-char{position:absolute;bottom:10px;right:14px;font-size:.68rem;color:var(--muted2)}
+.ql{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.8px;margin-bottom:9px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{padding:7px 15px;border-radius:50px;border:1.5px solid var(--border);
+  color:var(--muted);font-size:.8rem;font-weight:600;cursor:pointer;
+  transition:all .18s;background:transparent;font-family:var(--ff-b)}
+.chip:hover{border-color:var(--teal);color:var(--teal)}
+.chip.on{border-color:var(--teal);background:rgba(0,212,170,.12);color:var(--teal);font-weight:800}
+
+/* ═══════ LOADING ═══════ */
+.loader{position:fixed;inset:0;z-index:999;background:var(--bg);
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.loader.on{display:flex}
+.spin{width:52px;height:52px;border-radius:50%;border:3px solid var(--border);
+  border-top-color:var(--teal);animation:spin .85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-family:var(--ff-h);font-size:1rem;color:var(--muted);
+  animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ═══════ COMMON COMPONENTS ═══════ */
+.ph{margin-bottom:26px}
+.ph h1{font-family:var(--ff-h);font-size:1.8rem;font-weight:900;
+  letter-spacing:-.5px;margin-bottom:4px}
+.ph h1 em{color:var(--teal);font-style:normal}
+.ph p{color:var(--muted);font-size:.88rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh)}
+.card-dark{background:var(--surface);border-color:var(--border)}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;
+  border-radius:20px;font-size:.72rem;font-weight:700;font-family:var(--ff-b)}
+.tag-teal{background:rgba(0,212,170,.13);color:var(--teal)}
+.tag-amber{background:rgba(245,166,35,.13);color:var(--amber)}
+.tag-rose{background:rgba(255,92,122,.13);color:var(--rose)}
+.tag-violet{background:rgba(155,111,255,.13);color:var(--violet)}
+.tag-sky{background:rgba(76,168,255,.13);color:var(--sky)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.progress-track{background:var(--border);border-radius:10px;overflow:hidden;height:6px}
+.progress-fill{height:100%;border-radius:10px;
+  background:linear-gradient(90deg,var(--teal),#00f5c8);transition:width .7s ease}
+.progress-fill.amber{background:linear-gradient(90deg,var(--amber),#f5c542)}
+.progress-fill.rose{background:linear-gradient(90deg,var(--rose),#ff8fa3)}
+.progress-fill.violet{background:linear-gradient(90deg,var(--violet),#c4a8ff)}
+
+/* ═══════ STAT CARDS ═══════ */
+.stat-card{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:20px;position:relative;overflow:hidden}
+.stat-card::after{content:attr(data-ico);position:absolute;right:14px;top:12px;
+  font-size:1.7rem;opacity:.12}
+.stat-label{font-size:.72rem;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.stat-val{font-family:var(--ff-h);font-size:1.9rem;font-weight:900;margin-bottom:3px}
+.stat-sub{font-size:.73rem;font-weight:600;color:var(--teal)}
+.stat-sub.warn{color:var(--amber)}
+
+/* ═══════ ROADMAP ═══════ */
+.rm-hero{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:26px 30px;margin-bottom:26px;
+  display:flex;align-items:center;gap:22px;position:relative;overflow:hidden}
+.rm-hero::before{content:'';position:absolute;top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,212,170,.15) 0%,transparent 70%)}
+.rm-ring{width:76px;height:76px;flex-shrink:0;position:relative}
+.rm-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--border2);stroke-width:7}
+.ring-fg{fill:none;stroke:var(--teal);stroke-width:7;stroke-linecap:round;
+  transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)}
+.ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-h);font-size:1.05rem;font-weight:900;color:var(--teal)}
+.rm-info{flex:1;position:relative;z-index:1}
+.rm-title{font-family:var(--ff-h);font-size:1.3rem;font-weight:900;margin-bottom:4px}
+.rm-meta{color:var(--muted);font-size:.82rem;margin-bottom:10px}
+.rm-tags{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Timeline */
+.timeline{position:relative;padding-left:44px}
+.timeline::before{content:'';position:absolute;left:17px;top:20px;bottom:20px;
+  width:2px;background:linear-gradient(to bottom,var(--teal),var(--border))}
+.ms{position:relative;margin-bottom:22px;animation:pgIn .4s ease both}
+.ms:nth-child(1){animation-delay:.04s}.ms:nth-child(2){animation-delay:.08s}
+.ms:nth-child(3){animation-delay:.12s}.ms:nth-child(4){animation-delay:.16s}
+.ms:nth-child(5){animation-delay:.2s}.ms:nth-child(6){animation-delay:.24s}
+.ms:nth-child(7){animation-delay:.28s}.ms:nth-child(8){animation-delay:.32s}
+.ms-dot{width:36px;height:36px;border-radius:50%;position:absolute;left:-44px;top:0;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all .25s;border:2px solid var(--border)}
+.ms-dot.done{background:var(--teal);border-color:var(--teal);color:var(--bg);font-weight:900}
+.ms-dot.active{background:rgba(0,212,170,.15);border-color:var(--teal);color:var(--teal);
+  animation:glow 2s infinite}
+.ms-dot.locked{background:var(--surface);color:var(--muted2);opacity:.6}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(0,212,170,.3)}50%{box-shadow:0 0 0 8px rgba(0,212,170,0)}}
+.ms-card{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:18px 20px;transition:all .2s;cursor:pointer}
+.ms-card:hover:not(.locked){border-color:var(--teal);box-shadow:0 4px 20px rgba(0,212,170,.12);
+  transform:translateX(4px)}
+.ms-card.done-card{background:rgba(0,212,170,.04);border-color:rgba(0,212,170,.25)}
+.ms-card.active-card{border-color:rgba(0,212,170,.5);
+  box-shadow:0 0 0 3px rgba(0,212,170,.08)}
+.ms-card.locked{opacity:.55;cursor:not-allowed}
+.ms-head{display:flex;align-items:flex-start;gap:11px;margin-bottom:8px}
+.ms-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px}
+.ms-name{font-weight:800;font-size:.92rem;margin-bottom:2px}
+.ms-status{font-size:.72rem;font-weight:700}
+.ms-status.done{color:var(--teal)}.ms-status.active{color:var(--amber)}.ms-status.locked{color:var(--muted2)}
+.ms-desc{font-size:.8rem;color:var(--muted);margin-bottom:10px;line-height:1.6}
+.ms-footer{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ms-skills{display:flex;flex-wrap:wrap;gap:5px}
+.ms-actions{display:flex;gap:7px;flex-shrink:0}
+.complete-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--teal);
+  background:rgba(0,212,170,.1);color:var(--teal);font-family:var(--ff-b);
+  font-size:.75rem;font-weight:800;cursor:pointer;transition:all .18s;white-space:nowrap}
+.complete-btn:hover{background:var(--teal);color:var(--bg)}
+.complete-btn.done-btn{border-color:var(--muted2);background:transparent;
+  color:var(--muted2);cursor:default}
+
+/* Resources panel */
+.res-card{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:18px;margin-bottom:12px;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px}
+.res-card:hover{border-color:var(--teal);transform:translateX(3px)}
+.res-icon{font-size:1.4rem;flex-shrink:0}
+.res-title{font-size:.85rem;font-weight:700;margin-bottom:2px}
+.res-meta{font-size:.73rem;color:var(--muted)}
+
+/* ═══════ COURSES ═══════ */
+.cf-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.cf-btn{padding:7px 16px;border-radius:50px;border:1.5px solid var(--border);
+  background:transparent;color:var(--muted);font-family:var(--ff-b);
+  font-size:.78rem;font-weight:700;cursor:pointer;transition:all .18s}
+.cf-btn:hover,.cf-btn.on{border-color:var(--teal);color:var(--teal);background:rgba(0,212,170,.08)}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;cursor:pointer;transition:all .22s}
+.cc:hover{transform:translateY(-4px);border-color:var(--teal);box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.cc-thumb{height:105px;display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;position:relative}
+.cc-badge{position:absolute;top:8px;right:8px;background:rgba(0,212,170,.18);
+  border:1px solid rgba(0,212,170,.3);color:var(--teal);
+  font-size:.66rem;font-weight:800;padding:3px 8px;border-radius:20px}
+.cc-body{padding:14px 16px 16px}
+.cc-prov{font-size:.66rem;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
+.cc-title{font-weight:800;font-size:.88rem;line-height:1.4;margin-bottom:8px}
+.cc-meta{display:flex;align-items:center;gap:9px;font-size:.74rem;color:var(--muted);margin-bottom:10px}
+.cc-stars{color:var(--amber)}
+.cc-foot{display:flex;align-items:center;justify-content:space-between}
+.cc-price{font-weight:800;font-size:.88rem}
+.cc-price.free{color:var(--teal)}
+.cc-lv{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px}
+.lv-b{background:rgba(0,212,170,.12);color:var(--teal)}
+.lv-i{background:rgba(245,166,35,.12);color:var(--amber)}
+.lv-a{background:rgba(255,92,122,.12);color:var(--rose)}
+
+/* ═══════ PROFILE ═══════ */
+.prof-hero{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:30px;margin-bottom:20px;
+  display:flex;align-items:flex-start;gap:22px;position:relative;overflow:hidden}
+.prof-hero::before{content:'';position:absolute;top:-80px;right:-80px;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(155,111,255,.12) 0%,transparent 70%)}
+.prof-av{width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),var(--violet));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;font-weight:900;color:var(--bg);
+  flex-shrink:0;border:3px solid rgba(255,255,255,.1);position:relative;z-index:1}
+.prof-info{flex:1;position:relative;z-index:1}
+.prof-name{font-family:var(--ff-h);font-size:1.6rem;font-weight:900;margin-bottom:3px}
+.prof-sub{color:var(--muted);font-size:.84rem;margin-bottom:12px}
+.prof-badges{display:flex;gap:8px;flex-wrap:wrap}
+.pbadge{display:flex;align-items:center;gap:5px;padding:5px 12px;
+  border-radius:50px;background:rgba(255,255,255,.07);
+  color:rgba(255,255,255,.7);font-size:.74rem;font-weight:700}
+
+/* Skill bars */
+.skill-row{margin-bottom:12px}
+.skill-head{display:flex;justify-content:space-between;margin-bottom:5px}
+.skill-nm{font-size:.82rem;font-weight:700}
+.skill-pc{font-size:.76rem;color:var(--muted);font-family:var(--ff-b)}
+
+/* Bar chart */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.bar-lbl{font-size:.8rem;font-weight:600;width:100px;flex-shrink:0;color:var(--text)}
+.bar-out{flex:1;background:var(--border);border-radius:6px;height:12px;overflow:hidden}
+.bar-in{height:100%;border-radius:6px;transition:width 1s ease}
+.bar-val{font-size:.75rem;color:var(--muted);width:32px;text-align:right}
+
+/* Activity bars */
+.act-bars{display:flex;align-items:flex-end;gap:5px;height:70px}
+.act-b{flex:1;border-radius:3px 3px 0 0;background:var(--border2);
+  cursor:pointer;transition:background .18s;min-height:3px}
+.act-b:hover{background:rgba(0,212,170,.5)}
+.act-b.today{background:var(--teal)}
+.act-lbl{font-size:.62rem;color:var(--muted);text-align:center;margin-top:3px}
+
+/* Heatmap */
+.heatmap{display:flex;flex-direction:column;gap:3px}
+.hm-row{display:flex;gap:3px}
+.hm-c{width:13px;height:13px;border-radius:3px;background:var(--border)}
+.hm-c.l1{background:rgba(0,212,170,.2)}.hm-c.l2{background:rgba(0,212,170,.45)}
+.hm-c.l3{background:rgba(0,212,170,.7)}.hm-c.l4{background:var(--teal)}
+
+/* Goal progress card */
+.goal-prog-card{border:1px solid rgba(0,212,170,.25);background:rgba(0,212,170,.04);
+  border-radius:var(--r-lg);padding:18px;margin-bottom:12px}
+.gpc-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.gpc-title{font-weight:800;font-size:.9rem;flex:1}
+.gpc-pct{font-family:var(--ff-h);font-size:1.3rem;font-weight:900;color:var(--teal)}
+.gpc-meta{font-size:.75rem;color:var(--muted);margin-top:5px}
+
+/* ═══════ TOAST ═══════ */
+#toast{position:fixed;bottom:22px;right:22px;z-index:9999;
+  background:var(--card2);color:var(--text);border:1px solid var(--border);
+  padding:12px 18px;border-radius:var(--r);font-size:.84rem;font-weight:600;
+  box-shadow:var(--sh);transform:translateY(60px);opacity:0;
+  transition:all .38s cubic-bezier(.34,1.56,.64,1);max-width:280px}
+#toast.on{transform:translateY(0);opacity:1}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:860px){
+  .sidebar{display:none}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="bg-fx"></div>
+<div class="bg-grid"></div>
+
+<!-- ═══════ LOADER ═══════ -->
+<div class="loader" id="loader">
+  <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:900;color:var(--text)">
+    Learn<em style="color:var(--teal);font-style:normal">Path</em>
+  </div>
+  <div class="spin"></div>
+  <div class="load-txt" id="load-txt">Building your roadmap…</div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE 1 — AUTH
+════════════════════════════════════════ -->
+<div class="pg on" id="pg-auth">
+  <div class="auth-wrap">
+    <div class="brand">
+      <div class="brand-mark">🧭</div>
+      <div class="brand-name">Learn<em>Path</em></div>
+    </div>
+    <div class="auth-card">
+      <div class="tab-bar">
+        <button class="tab on" id="t-login" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" id="t-signup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="apanel on" id="ap-login">
+        <div class="ptitle">Welcome <em>back.</em></div>
+        <div class="psub">Sign in to continue your learning journey.</div>
+        <div class="ig">
+          <label>Email</label>
+          <div class="irow"><input type="email" id="le" placeholder="you@example.com"/><span class="ii">✉</span></div>
+          <div class="err" id="le-e">Enter a valid email.</div>
+        </div>
+        <div class="ig">
+          <label>Password</label>
+          <div class="irow"><input type="password" id="lp" placeholder="Your password"/><span class="ii">🔒</span>
+            <button class="pw-eye" onclick="tpw('lp',this)">👁</button></div>
+          <div class="err" id="lp-e">Password required.</div>
+        </div>
+        <div class="between">
+          <label><input type="checkbox"/> Remember me</label>
+          <a class="alink" href="#">Forgot password?</a>
+        </div>
+        <button class="btn btn-teal btn-full" onclick="doLogin()">Sign In →</button>
+        <div class="divider">or</div>
+        <div class="social-row">
+          <button class="btn-social" onclick="socialIn('Google')"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</button>
+          <button class="btn-social" onclick="socialIn('GitHub')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>GitHub</button>
+        </div>
+        <div style="text-align:center;margin-top:18px;font-size:.82rem;color:var(--muted)">
+          No account? <button class="alink" style="border:none;background:none;cursor:pointer" onclick="switchTab('signup')">Create one →</button>
+        </div>
+      </div>
+
+      <!-- SIGNUP -->
+      <div class="apanel" id="ap-signup">
+        <div class="ptitle">Start <em>learning.</em></div>
+        <div class="psub">Free forever. Build your personalised roadmap.</div>
+        <div class="row2">
+          <div class="ig"><label>First Name</label>
+            <div class="irow"><input type="text" id="sf" placeholder="John"/><span class="ii">👤</span></div>
+            <div class="err" id="sf-e">Required.</div></div>
+          <div class="ig"><label>Last Name</label>
+            <div class="irow"><input type="text" id="sl" placeholder="Doe"/><span class="ii">👤</span></div>
+            <div class="err" id="sl-e">Required.</div></div>
+        </div>
+        <div class="ig"><label>Email</label>
+          <div class="irow"><input type="email" id="se" placeholder="you@example.com"/><span class="ii">✉</span></div>
+          <div class="err" id="se-e">Enter a valid email.</div></div>
+        <div class="ig"><label>Password</label>
+          <div class="irow"><input type="password" id="sp" placeholder="Min. 8 characters" oninput="pwStr(this.value)"/><span class="ii">🔒</span>
+            <button class="pw-eye" onclick="tpw('sp',this)">👁</button></div>
+          <div class="str-bars"><div class="sseg" id="s1"></div><div class="sseg" id="s2"></div><div class="sseg" id="s3"></div><div class="sseg" id="s4"></div></div>
+          <div class="str-lbl" id="str-l">Enter a password</div>
+          <div class="err" id="sp-e">Min. 8 characters.</div></div>
+        <div class="ig"><label>Confirm Password</label>
+          <div class="irow"><input type="password" id="sc" placeholder="Repeat password"/><span class="ii">🔒</span>
+            <button class="pw-eye" onclick="tpw('sc',this)">👁</button></div>
+          <div class="err" id="sc-e">Passwords don't match.</div></div>
+        <div class="check-row"><input type="checkbox" id="sterm"/>
+          <label for="sterm">I agree to the <a href="#">Terms</a> & <a href="#">Privacy Policy</a></label></div>
+        <div class="err" id="st-e" style="margin-top:-14px;margin-bottom:14px">Accept terms to continue.</div>
+        <button class="btn btn-teal btn-full" onclick="doSignup()">Create Account →</button>
+        <div class="divider">or</div>
+        <div class="social-row">
+          <button class="btn-social" onclick="socialIn('Google')"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</button>
+          <button class="btn-social" onclick="socialIn('GitHub')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>GitHub</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE 2 — GOAL
+════════════════════════════════════════ -->
+<div class="pg" id="pg-goal">
+  <div class="goal-wrap">
+    <div class="goal-card">
+      <div class="g-eyebrow">⚡ Step 2 — Your Goal</div>
+      <div class="g-title">What do you want<br>to <em>achieve?</em></div>
+      <div class="g-sub">Type your goal in your own words and we'll build a personalised roadmap with milestones and course recommendations.</div>
+      <div class="goal-box">
+        <textarea class="goal-ta" id="goal-ta" maxlength="300" oninput="gchar(this)"
+          placeholder="e.g. I want to become a full-stack web developer and get a job…"></textarea>
+        <div class="g-char"><span id="gc">0</span>/300</div>
+      </div>
+      <div class="ql">⚡ Quick picks</div>
+      <div class="chips" id="qchips"></div>
+      <button class="btn btn-teal btn-full" style="font-size:.97rem;padding:14px" onclick="submitGoal()">
+        🗺️ Build My Roadmap →
+      </button>
+      <div style="text-align:center;margin-top:14px">
+        <button class="btn btn-ghost btn-sm" onclick="goPg('pg-auth')">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     APP SHELL (pages: roadmap, courses, profile)
+════════════════════════════════════════ -->
+<div id="pg-app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-mark">🧭</div>
+      <div class="sb-name">Learn<em>Path</em></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">My Learning</div>
+      <button class="sb-item active" onclick="showAP('roadmap',this)"><span class="si">🗺️</span>Roadmap</button>
+      <button class="sb-item" onclick="showAP('courses',this)"><span class="si">📚</span>Courses<span class="sb-badge" id="sb-course-ct">0</span></button>
+      <div class="sb-section">Account</div>
+      <button class="sb-item" onclick="showAP('profile',this)"><span class="si">👤</span>Profile</button>
+      <div class="sb-section">More</div>
+      <button class="sb-item" onclick="toast('⚙️ Settings coming soon')"><span class="si">⚙️</span>Settings</button>
+      <button class="sb-item" onclick="logOut()"><span class="si">🚪</span>Log Out</button>
+    </nav>
+    <div class="sb-foot">
+      <div class="sb-user" onclick="showAP('profile',null)">
+        <div class="sb-av" id="sb-av">LP</div>
+        <div>
+          <div class="sb-uname" id="sb-uname">User</div>
+          <div class="sb-urole" id="sb-urole">Learner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-title" id="ap-title">My Roadmap</div>
+      <div class="tb-search"><span style="color:var(--muted2)">🔍</span><input placeholder="Search…"/></div>
+      <div class="tb-btn" onclick="showAP('profile',null)">👤</div>
+      <div class="tb-btn" onclick="toast('🔔 No new notifications')">🔔</div>
+    </div>
+
+    <!-- ───── ROADMAP APP PAGE ───── -->
+    <div class="ap on" id="ap-roadmap">
+      <div class="ph"><h1>My <em>Roadmap</em></h1><p>Track and complete milestones on your personalised path.</p></div>
+
+      <!-- Hero goal card -->
+      <div class="rm-hero">
+        <div class="rm-ring">
+          <svg width="76" height="76" viewBox="0 0 76 76">
+            <circle class="ring-bg" cx="38" cy="38" r="30"/>
+            <circle class="ring-fg" id="rm-ring-fg" cx="38" cy="38" r="30"
+              stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+          </svg>
+          <div class="ring-txt" id="rm-ring-pct">0%</div>
+        </div>
+        <div class="rm-info">
+          <div class="rm-title" id="rm-goal-name">Your Goal</div>
+          <div class="rm-meta" id="rm-meta">0 of 0 milestones complete</div>
+          <div class="rm-tags">
+            <span class="tag tag-teal" id="rm-tag-status">🎯 Active</span>
+            <span class="tag tag-amber" id="rm-tag-done">0 done</span>
+            <span class="tag tag-violet" id="rm-tag-left">0 remaining</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="goPg('pg-goal')" style="flex-shrink:0">↺ Change Goal</button>
+      </div>
+
+      <div class="g2" style="align-items:start">
+        <!-- Timeline -->
+        <div>
+          <div style="font-weight:800;font-size:.95rem;margin-bottom:18px;display:flex;align-items:center;gap:8px">
+            📍 Learning Path
+            <span class="tag tag-teal" id="rm-prog-tag">0%</span>
+          </div>
+          <div class="timeline" id="rm-timeline"></div>
+        </div>
+        <!-- Resources -->
+        <div>
+          <div style="font-weight:800;font-size:.95rem;margin-bottom:18px">📖 Current Resources</div>
+          <div id="rm-resources"></div>
+          <div style="margin-top:18px">
+            <div style="font-weight:800;font-size:.95rem;margin-bottom:12px">🏅 Milestone Stats</div>
+            <div class="g2" id="rm-mini-stats"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── COURSES APP PAGE ───── -->
+    <div class="ap" id="ap-courses">
+      <div class="ph"><h1>Recommended <em>Courses</em></h1><p id="ap-courses-sub">Curated for your goal.</p></div>
+      <div class="cf-bar" id="cf-bar"></div>
+      <div class="cg" id="cg"></div>
+    </div>
+
+    <!-- ───── PROFILE APP PAGE ───── -->
+    <div class="ap" id="ap-profile">
+      <div class="ph"><h1>My <em>Profile</em></h1><p>Your learning stats and goal progress.</p></div>
+
+      <!-- Hero -->
+      <div class="prof-hero">
+        <div class="prof-av" id="pf-av">LP</div>
+        <div class="prof-info">
+          <div class="prof-name" id="pf-name">User</div>
+          <div class="prof-sub" id="pf-sub">Learner</div>
+          <div class="prof-badges" id="pf-badges"></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="toast('✏️ Edit profile coming soon!')">✏️ Edit</button>
+      </div>
+
+      <!-- KPI row -->
+      <div class="g4" style="margin-bottom:20px" id="pf-kpi"></div>
+
+      <div class="g2" style="margin-bottom:20px">
+        <!-- Goal progress -->
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:14px">🎯 Goal Progress</div>
+          <div id="pf-goal-prog"></div>
+        </div>
+        <!-- Skill progress -->
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:14px">🛠️ Skills Gained</div>
+          <div id="pf-skills"></div>
+        </div>
+      </div>
+
+      <div class="g2" style="margin-bottom:20px">
+        <!-- Activity chart -->
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:4px">📊 Weekly Activity</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Hours this week</div>
+          <div class="act-bars" id="pf-act-bars"></div>
+          <div style="display:flex;gap:5px;margin-top:4px" id="pf-act-lbls"></div>
+        </div>
+        <!-- Topic breakdown -->
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:14px">📈 Time by Topic</div>
+          <div id="pf-topic-bars"></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <!-- Heatmap -->
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:4px">🔥 Activity Heatmap</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Last 12 weeks</div>
+          <div class="heatmap" id="pf-heatmap"></div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:10px;font-size:.7rem;color:var(--muted)">
+            Less <div class="hm-c"></div><div class="hm-c l1"></div><div class="hm-c l2"></div><div class="hm-c l3"></div><div class="hm-c l4"></div> More
+          </div>
+        </div>
+        <!-- Achievements -->
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:14px">🏆 Achievements</div>
+          <div id="pf-achv"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+const S = {
+  name: 'User', email: '',
+  goal: '',
+  goalKey: 'web',
+  milestones: [],   // array of milestone objects (mutated on complete)
+  completedMs: 0,
+  totalMs: 0,
+  hoursLogged: 68,
+  streak: 14,
+  coursesEnrolled: 3,
+};
+
+/* ═══════════════════════════════════
+   PAGE NAVIGATION
+═══════════════════════════════════ */
+function goPg(id) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('on');
+  if (id === 'pg-app') {
+    document.getElementById('pg-app').style.display = 'flex';
+    document.getElementById('pg-app').classList.add('on');
+  }
+}
+
+function showApp() {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  const app = document.getElementById('pg-app');
+  app.style.display = 'flex';
+  app.classList.add('on');
+  showAP('roadmap', document.querySelector('.sb-item'));
+}
+
+function showAP(id, btn) {
+  document.querySelectorAll('.ap').forEach(p => p.classList.remove('on'));
+  document.getElementById('ap-' + id).classList.add('on');
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const titles = { roadmap: 'My Roadmap', courses: 'Recommended Courses', profile: 'My Profile' };
+  document.getElementById('ap-title').textContent = titles[id] || id;
+  if (id === 'profile') buildProfile();
+}
+
+/* ═══════════════════════════════════
+   AUTH
+═══════════════════════════════════ */
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.apanel').forEach(p => p.classList.remove('on'));
+  document.getElementById('t-' + t).classList.add('on');
+  document.getElementById('ap-' + t).classList.add('on');
+}
+function tpw(id, btn) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+  btn.textContent = el.type === 'password' ? '👁' : '🙈';
+}
+function pwStr(v) {
+  const segs = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
+  const lbl = document.getElementById('str-l');
+  let sc = 0;
+  if (v.length >= 8) sc++;
+  if (/[A-Z]/.test(v) && /[0-9]/.test(v)) sc++;
+  if (v.length >= 12) sc++;
+  if (/[^A-Za-z0-9]/.test(v)) sc++;
+  const cols = ['#ff5c7a','#f5a623','#00d4aa','#4ca8ff'];
+  const labs = ['Weak','Fair','Strong','Very Strong'];
+  segs.forEach((s, i) => s.style.background = i < sc ? cols[sc-1] : 'var(--border)');
+  lbl.textContent = v.length === 0 ? 'Enter a password' : (labs[sc-1] || 'Weak');
+  lbl.style.color = v.length === 0 ? 'var(--muted)' : cols[sc-1];
+}
+function err(id, show) { document.getElementById(id).classList.toggle('on', show); }
+function doLogin() {
+  const e = document.getElementById('le').value.trim();
+  const p = document.getElementById('lp').value;
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  err('le-e', !ok); err('lp-e', !p);
+  if (!ok || !p) return;
+  S.name = e.split('@')[0].charAt(0).toUpperCase() + e.split('@')[0].slice(1);
+  S.email = e;
+  toast('✅ Welcome back, ' + S.name + '!');
+  setTimeout(() => goPg('pg-goal'), 600);
+}
+function doSignup() {
+  const f = document.getElementById('sf').value.trim();
+  const l = document.getElementById('sl').value.trim();
+  const e = document.getElementById('se').value.trim();
+  const p = document.getElementById('sp').value;
+  const c = document.getElementById('sc').value;
+  const t = document.getElementById('sterm').checked;
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  err('sf-e', !f); err('sl-e', !l); err('se-e', !ok);
+  err('sp-e', p.length < 8); err('sc-e', p !== c || !c); err('st-e', !t);
+  if (!f || !l || !ok || p.length < 8 || p !== c || !t) return;
+  S.name = f; S.email = e;
+  toast('🎉 Account created! Welcome, ' + f + '!');
+  setTimeout(() => goPg('pg-goal'), 600);
+}
+function socialIn(prov) {
+  S.name = 'User';
+  toast('🔗 Signing in with ' + prov + '…');
+  setTimeout(() => goPg('pg-goal'), 800);
+}
+function logOut() {
+  document.getElementById('pg-app').style.display = 'none';
+  document.getElementById('pg-app').classList.remove('on');
+  goPg('pg-auth');
+  toast('👋 Logged out successfully');
+}
+
+/* ═══════════════════════════════════
+   GOAL PAGE
+═══════════════════════════════════ */
+const quickGoals = [
+  '💻 Web Development','🤖 Machine Learning','📊 Data Science',
+  '🎨 UI/UX Design','📱 Mobile Apps','☁️ Cloud & DevOps',
+  '🔐 Cybersecurity','🐍 Python Programming','🎮 Game Development',
+];
+(function initChips() {
+  document.getElementById('qchips').innerHTML = quickGoals.map(g =>
+    `<button class="chip" onclick="pickChip(this,'${g}')">${g}</button>`
+  ).join('');
+})();
+function pickChip(el, g) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  const ta = document.getElementById('goal-ta');
+  ta.value = g;
+  document.getElementById('gc').textContent = g.length;
+}
+function gchar(el) { document.getElementById('gc').textContent = el.value.length; }
+
+function submitGoal() {
+  const g = document.getElementById('goal-ta').value.trim();
+  if (!g) { toast('✏️ Please enter your learning goal!'); return; }
+  S.goal = g;
+  S.goalKey = detectKey(g);
+  showLoader('🗺️ Building your roadmap…');
+  setTimeout(() => {
+    hideLoader();
+    buildAll();
+    showApp();
+  }, 1800);
+}
+
+/* ═══════════════════════════════════
+   GOAL → ROADMAP DATA
+═══════════════════════════════════ */
+function detectKey(t) {
+  t = t.toLowerCase();
+  if (/(web|html|css|javascript|react|node|frontend|backend|fullstack)/.test(t)) return 'web';
+  if (/(machine learning|ml|ai |artificial|neural|deep learning)/.test(t)) return 'ml';
+  if (/(data science|data analyst|analytics|sql|pandas|tableau)/.test(t)) return 'data';
+  if (/(design|ui |ux |figma|adobe|graphic)/.test(t)) return 'design';
+  if (/(mobile|android|ios|flutter|react native|swift)/.test(t)) return 'mobile';
+  if (/(cloud|devops|aws|docker|kubernetes|ci.cd)/.test(t)) return 'cloud';
+  if (/(cyber|security|hack|ethical|penetration)/.test(t)) return 'cyber';
+  if (/(python|data|programming)/.test(t)) return 'python';
+  return 'general';
+}
+
+const ROADMAPS = {
+  web: {
+    label:'Web Developer', emoji:'💻',
+    milestones: [
+      { title:'Internet & Web Basics', desc:'How browsers, HTTP, and DNS work. Build your first webpage.', icon:'🌐', dur:'1 week', skills:['HTML','CSS','DevTools'], resources:[{t:'📹 Video','n':'HTML Crash Course','d':'2h','free':true},{t:'📖 Article','n':'How Browsers Work','d':'20min','free':true},{t:'🛠 Project','n':'Build a Personal Page','d':'3h','free':true}] },
+      { title:'CSS & Responsive Design', desc:'Flexbox, Grid, animations and mobile-first design principles.', icon:'🎨', dur:'2 weeks', skills:['Flexbox','CSS Grid','Animations','Media Queries'], resources:[{t:'📹 Video','n':'CSS Flexbox in 20 minutes','d':'20min','free':true},{t:'📹 Video','n':'CSS Grid Layout','d':'1h','free':true},{t:'🛠 Project','n':'Clone a Landing Page','d':'5h','free':true}] },
+      { title:'JavaScript Fundamentals', desc:'Variables, functions, DOM manipulation, events and ES6+ features.', icon:'🟡', dur:'3 weeks', skills:['JS ES6','DOM API','Events','Fetch API'], resources:[{t:'📚 Course','n':'JavaScript 30 by Wes Bos','d':'10h','free':true},{t:'📖 Book','n':'Eloquent JavaScript (free)','d':'20h','free':true},{t:'🛠 Project','n':'Build a To-Do App','d':'6h','free':true}] },
+      { title:'React Framework', desc:'Components, hooks, state management and building real UIs.', icon:'⚛️', dur:'4 weeks', skills:['React','JSX','useState','useEffect','React Router'], resources:[{t:'📚 Course','n':'Scrimba React Course','d':'18h','free':true},{t:'📹 Video','n':'React in 100 Seconds','d':'2min','free':true},{t:'🛠 Project','n':'Build a Movie Search App','d':'8h','free':true}] },
+      { title:'Backend with Node.js', desc:'Express servers, REST APIs, middleware and authentication.', icon:'🖥️', dur:'3 weeks', skills:['Node.js','Express','REST API','JWT'], resources:[{t:'📚 Course','n':'Node.js Crash Course','d':'8h','free':true},{t:'📖 Docs','n':'Express Official Docs','d':'4h','free':true}] },
+      { title:'Databases', desc:'SQL with PostgreSQL, NoSQL with MongoDB, ORMs and data modeling.', icon:'🗄️', dur:'2 weeks', skills:['PostgreSQL','MongoDB','Prisma'], resources:[{t:'📚 Course','n':'SQL for Beginners','d':'6h','free':true}] },
+      { title:'Deploy & Ship', desc:'Git workflows, CI/CD pipelines, Vercel/Netlify deployment and domains.', icon:'🚀', dur:'1 week', skills:['Git','GitHub','Vercel','Docker basics'], resources:[{t:'📹 Video','n':'Git & GitHub for Beginners','d':'3h','free':true},{t:'🛠 Project','n':'Deploy a Full-Stack App','d':'4h','free':true}] },
+    ]
+  },
+  ml: {
+    label:'Machine Learning Engineer', emoji:'🤖',
+    milestones: [
+      { title:'Python & Math Foundations', desc:'Python, NumPy, Pandas, linear algebra and probability basics.', icon:'🐍', dur:'2 weeks', skills:['Python','NumPy','Pandas','Statistics'], resources:[{t:'📚 Course','n':'Python for Everybody','d':'30h','free':true},{t:'📖 Book','n':'Think Stats (free PDF)','d':'12h','free':true}] },
+      { title:'Data Exploration & Viz', desc:'Matplotlib, Seaborn, EDA techniques and storytelling with data.', icon:'📊', dur:'1 week', skills:['Matplotlib','Seaborn','EDA'], resources:[{t:'📚 Course','n':'Kaggle Data Viz Course','d':'4h','free':true}] },
+      { title:'Classical Machine Learning', desc:'Regression, classification, clustering with scikit-learn.', icon:'🧠', dur:'3 weeks', skills:['Scikit-learn','Regression','Classification','Clustering'], resources:[{t:'📚 Course','n':'ML A-Z on Udemy','d':'44h','free':false},{t:'📖 Book','n':'Hands-On ML (Aurélien)','d':'40h','free':false}] },
+      { title:'Deep Learning Basics', desc:'Neural networks, backpropagation, CNNs with TensorFlow/Keras.', icon:'🔷', dur:'4 weeks', skills:['TensorFlow','Keras','CNNs','Neural Nets'], resources:[{t:'📚 Course','n':'DeepLearning.AI Specialization','d':'80h','free':false},{t:'📚 Course','n':'Fast.ai Practical DL','d':'28h','free':true}] },
+      { title:'NLP & Transformers', desc:'Text processing, BERT, GPT and modern NLP architectures.', icon:'💬', dur:'3 weeks', skills:['HuggingFace','Transformers','NLP','BERT'], resources:[{t:'📚 Course','n':'HuggingFace NLP Course','d':'15h','free':true}] },
+      { title:'ML in Production', desc:'MLOps, model serving, monitoring and deployment pipelines.', icon:'🏭', dur:'2 weeks', skills:['MLflow','Docker','FastAPI','Model Serving'], resources:[{t:'📚 Course','n':'ML Engineering for Production','d':'60h','free':false}] },
+    ]
+  },
+  data: {
+    label:'Data Scientist', emoji:'📊',
+    milestones: [
+      { title:'Python & SQL Basics', desc:'Core Python programming and SQL for data querying.', icon:'🐍', dur:'2 weeks', skills:['Python','SQL','Pandas','NumPy'], resources:[{t:'📚 Course','n':'Python for Data Science (IBM)','d':'36h','free':false},{t:'📚 Course','n':'SQL for Data Analysis (Mode)','d':'6h','free':true}] },
+      { title:'Statistics & Probability', desc:'Distributions, hypothesis testing, p-values and Bayesian thinking.', icon:'📐', dur:'2 weeks', skills:['Statistics','Probability','A/B Testing'], resources:[{t:'📚 Course','n':'Khan Academy Statistics','d':'20h','free':true}] },
+      { title:'Data Wrangling & EDA', desc:'Cleaning messy data, feature engineering and exploratory analysis.', icon:'🔧', dur:'2 weeks', skills:['Pandas','Data Cleaning','Feature Engineering'], resources:[{t:'📚 Course','n':'Kaggle Pandas Course','d':'4h','free':true}] },
+      { title:'Machine Learning', desc:'Scikit-learn models, cross-validation and model evaluation.', icon:'🧠', dur:'3 weeks', skills:['Scikit-learn','Model Selection','Cross-Validation'], resources:[{t:'📚 Course','n':'ML A-Z','d':'44h','free':false}] },
+      { title:'Data Visualization', desc:'Telling stories with charts using Matplotlib, Seaborn and Tableau.', icon:'📈', dur:'1 week', skills:['Matplotlib','Seaborn','Tableau','Power BI'], resources:[{t:'📚 Course','n':'Tableau for Beginners','d':'8h','free':false}] },
+      { title:'Real Projects & Portfolio', desc:'Build 3 end-to-end projects and deploy a portfolio.', icon:'🚀', dur:'3 weeks', skills:['GitHub','Streamlit','Portfolio'], resources:[{t:'🛠 Project','n':'Kaggle Competition Entry','d':'20h','free':true}] },
+    ]
+  },
+  design: {
+    label:'UI/UX Designer', emoji:'🎨',
+    milestones: [
+      { title:'Design Principles', desc:'Color theory, typography, spacing, visual hierarchy and Gestalt.', icon:'🎭', dur:'1 week', skills:['Color Theory','Typography','Layout'], resources:[{t:'📚 Course','n':'Design Principles on Coursera','d':'8h','free':false}] },
+      { title:'Figma Mastery', desc:'Frames, components, auto-layout, prototyping and design systems.', icon:'🖌️', dur:'2 weeks', skills:['Figma','Components','Auto-Layout','Prototyping'], resources:[{t:'📚 Course','n':'Figma for Beginners','d':'12h','free':true},{t:'📖 Docs','n':'Figma Official Tutorials','d':'5h','free':true}] },
+      { title:'UX Research', desc:'User interviews, surveys, affinity mapping and usability testing.', icon:'🔍', dur:'2 weeks', skills:['User Research','Personas','Usability Testing'], resources:[{t:'📚 Course','n':'Google UX Certificate','d':'200h','free':false}] },
+      { title:'Information Architecture', desc:'User flows, sitemaps, wireframing and lo-fi prototypes.', icon:'🗂️', dur:'1 week', skills:['Wireframing','User Flows','Sitemaps'], resources:[{t:'📚 Course','n':'IA Fundamentals','d':'6h','free':false}] },
+      { title:'Design Systems', desc:'Building scalable component libraries, tokens and documentation.', icon:'🧩', dur:'2 weeks', skills:['Design Systems','Tokens','Documentation'], resources:[{t:'📖 Article','n':'Design Systems Handbook','d':'4h','free':true}] },
+      { title:'Portfolio & Case Studies', desc:'Documenting 3 full design projects with process, decisions and results.', icon:'🚀', dur:'2 weeks', skills:['Case Studies','Presentation','Portfolio'], resources:[{t:'🛠 Project','n':'Redesign a real app','d':'20h','free':true}] },
+    ]
+  },
+  mobile: {
+    label:'Mobile Developer', emoji:'📱',
+    milestones: [
+      { title:'Mobile Fundamentals', desc:'How native apps work, platform differences, app stores overview.', icon:'📱', dur:'1 week', skills:['Mobile Concepts','App Stores','UX Patterns'], resources:[{t:'📖 Article','n':'Android vs iOS Development','d':'1h','free':true}] },
+      { title:'Dart & Flutter Basics', desc:'Dart syntax, Flutter widgets, layouts and state basics.', icon:'🐦', dur:'3 weeks', skills:['Dart','Flutter','Widgets','Layouts'], resources:[{t:'📚 Course','n':'Flutter & Dart – Complete Guide','d':'42h','free':false},{t:'📖 Docs','n':'Flutter Official Docs','d':'10h','free':true}] },
+      { title:'State Management', desc:'Provider, Riverpod or BLoC for scalable app state.', icon:'🔄', dur:'2 weeks', skills:['Provider','Riverpod','BLoC'], resources:[{t:'📚 Course','n':'Flutter State Management','d':'10h','free':false}] },
+      { title:'APIs & Firebase', desc:'REST APIs, Firebase auth, Firestore and push notifications.', icon:'🔥', dur:'2 weeks', skills:['REST APIs','Firebase','Firestore','FCM'], resources:[{t:'📚 Course','n':'Firebase for Flutter','d':'8h','free':true}] },
+      { title:'Publish Your App', desc:'App store guidelines, screenshots, privacy and release process.', icon:'🚀', dur:'1 week', skills:['Play Store','App Store','Release'], resources:[{t:'📖 Docs','n':'Play Store Publishing Guide','d':'3h','free':true}] },
+    ]
+  },
+  cloud: {
+    label:'Cloud / DevOps Engineer', emoji:'☁️',
+    milestones: [
+      { title:'Linux & Networking', desc:'Linux commands, bash scripting, TCP/IP, DNS basics.', icon:'🐧', dur:'2 weeks', skills:['Linux','Bash','Networking'], resources:[{t:'📚 Course','n':'Linux for Beginners','d':'12h','free':true}] },
+      { title:'Containers with Docker', desc:'Images, containers, Dockerfile, volumes and Docker Compose.', icon:'🐳', dur:'2 weeks', skills:['Docker','Containers','Docker Compose'], resources:[{t:'📚 Course','n':'Docker Mastery','d':'20h','free':false}] },
+      { title:'Kubernetes Orchestration', desc:'Pods, services, deployments, Helm and cluster management.', icon:'⚙️', dur:'3 weeks', skills:['Kubernetes','Helm','kubectl'], resources:[{t:'📚 Course','n':'Kubernetes for Developers','d':'30h','free':false}] },
+      { title:'CI/CD Pipelines', desc:'GitHub Actions, Jenkins, automated testing and deployment flows.', icon:'🔁', dur:'2 weeks', skills:['GitHub Actions','Jenkins','CI/CD'], resources:[{t:'📖 Docs','n':'GitHub Actions Docs','d':'5h','free':true}] },
+      { title:'AWS Core Services', desc:'EC2, S3, RDS, Lambda, IAM and VPC fundamentals.', icon:'☁️', dur:'3 weeks', skills:['AWS EC2','S3','Lambda','IAM'], resources:[{t:'📚 Course','n':'AWS Certified Cloud Practitioner','d':'40h','free':false}] },
+    ]
+  },
+  cyber: {
+    label:'Cybersecurity Analyst', emoji:'🔐',
+    milestones: [
+      { title:'Networking Foundations', desc:'TCP/IP, OSI model, protocols, firewalls and packet analysis.', icon:'🌐', dur:'2 weeks', skills:['TCP/IP','Wireshark','Networking'], resources:[{t:'📚 Course','n':'CompTIA Network+ Prep','d':'30h','free':false}] },
+      { title:'Linux & Command Line', desc:'Linux administration, bash scripting, file permissions.', icon:'🐧', dur:'1 week', skills:['Linux','Bash','Permissions'], resources:[{t:'📚 Course','n':'Linux Fundamentals (TryHackMe)','d':'10h','free':true}] },
+      { title:'Ethical Hacking', desc:'Reconnaissance, scanning, exploitation basics with Kali Linux.', icon:'🥷', dur:'3 weeks', skills:['Kali Linux','Nmap','Metasploit'], resources:[{t:'📚 Course','n':'Ethical Hacking Bootcamp','d':'25h','free':false},{t:'🛠 Platform','n':'TryHackMe Rooms','d':'20h','free':true}] },
+      { title:'Web Security & OWASP', desc:'SQL injection, XSS, CSRF, OWASP Top 10 and bug bounty basics.', icon:'🕸️', dur:'2 weeks', skills:['OWASP Top 10','XSS','SQL Injection','Burp Suite'], resources:[{t:'📚 Course','n':'Web Application Security','d':'10h','free':true}] },
+      { title:'Security Operations', desc:'SIEM, log analysis, incident response and threat intelligence.', icon:'🛡️', dur:'2 weeks', skills:['SIEM','Log Analysis','Incident Response'], resources:[{t:'📚 Course','n':'SOC Analyst Path','d':'20h','free':true}] },
+      { title:'Certifications', desc:'Prepare for CompTIA Security+ or CEH certification exams.', icon:'🎓', dur:'4 weeks', skills:['Security+','CEH','Exam Prep'], resources:[{t:'📚 Course','n':'CompTIA Security+ (Jason Dion)','d':'40h','free':false}] },
+    ]
+  },
+  python: {
+    label:'Python Developer', emoji:'🐍',
+    milestones: [
+      { title:'Python Basics', desc:'Variables, data types, loops, functions, modules and OOP.', icon:'🐍', dur:'2 weeks', skills:['Python','OOP','Functions','Modules'], resources:[{t:'📚 Course','n':'Python for Everybody','d':'30h','free':true}] },
+      { title:'Data Structures & Algorithms', desc:'Lists, dicts, sets, complexity, sorting and search algorithms.', icon:'🔢', dur:'2 weeks', skills:['DSA','Big O','Sorting','Recursion'], resources:[{t:'📚 Course','n':'Algorithms in Python','d':'15h','free':true}] },
+      { title:'File I/O & APIs', desc:'Reading files, JSON, calling REST APIs and web scraping.', icon:'📂', dur:'1 week', skills:['File I/O','JSON','requests','BeautifulSoup'], resources:[{t:'📚 Course','n':'Python APIs Crash Course','d':'5h','free':true}] },
+      { title:'Databases with Python', desc:'SQLite, PostgreSQL with psycopg2 and SQLAlchemy ORM.', icon:'🗄️', dur:'1 week', skills:['SQLite','PostgreSQL','SQLAlchemy'], resources:[{t:'📖 Docs','n':'SQLAlchemy Docs','d':'4h','free':true}] },
+      { title:'Web Apps with Flask/Django', desc:'Build REST APIs and web apps with Flask or Django.', icon:'🌐', dur:'3 weeks', skills:['Flask','Django','REST API'], resources:[{t:'📚 Course','n':'Flask Mega Tutorial','d':'20h','free':true}] },
+      { title:'Testing & Deployment', desc:'pytest, Docker, CI/CD and deploying Python apps.', icon:'🚀', dur:'2 weeks', skills:['pytest','Docker','GitHub Actions'], resources:[{t:'📖 Docs','n':'pytest Official Docs','d':'5h','free':true}] },
+    ]
+  },
+  general: {
+    label:'Self-Directed Learner', emoji:'🎯',
+    milestones: [
+      { title:'Learning How to Learn', desc:'Spaced repetition, active recall, Pomodoro and building habits.', icon:'🧠', dur:'1 week', skills:['Learning Techniques','Study Habits','Note-taking'], resources:[{t:'📚 Course','n':'Learning How to Learn (Coursera)','d':'8h','free':true}] },
+      { title:'Computer Science Basics', desc:'Data, algorithms, problem-solving with Harvard CS50.', icon:'💻', dur:'4 weeks', skills:['CS Fundamentals','Problem Solving','Logic'], resources:[{t:'📚 Course','n':'Harvard CS50','d':'60h','free':true}] },
+      { title:'Communication & Writing', desc:'Clear writing, presentations and professional communication.', icon:'✍️', dur:'2 weeks', skills:['Writing','Presentations','Communication'], resources:[{t:'📚 Course','n':'Writing in the Sciences','d':'10h','free':true}] },
+      { title:'Critical Thinking', desc:'Logical reasoning, argument analysis and decision frameworks.', icon:'🎯', dur:'1 week', skills:['Critical Thinking','Decision Making'], resources:[{t:'📚 Course','n':'Introduction to Logic','d':'8h','free':true}] },
+      { title:'Build Your First Project', desc:'Apply everything by building a small real project end-to-end.', icon:'🛠️', dur:'2 weeks', skills:['Project Planning','Execution','Documentation'], resources:[{t:'🛠 Project','n':'Build anything you can demo','d':'20h','free':true}] },
+    ]
+  }
+};
+
+/* ═══════════════════════════════════
+   COURSE DATA
+═══════════════════════════════════ */
+const COURSES = {
+  web:[
+    {title:'The Complete Web Developer Bootcamp',provider:'Udemy',level:'Beginner',dur:'65h',rating:4.8,rev:'98k',price:'₹499',match:99,thumb:'🌐',bg:'#0d1f35',cat:'Web Dev'},
+    {title:'JavaScript: Zero to Expert',provider:'Udemy',level:'Intermediate',dur:'52h',rating:4.8,rev:'74k',price:'₹449',match:97,thumb:'🟡',bg:'#1a1600',cat:'JavaScript'},
+    {title:'React — The Complete Guide',provider:'Academind',level:'Intermediate',dur:'48h',rating:4.7,rev:'65k',price:'₹499',match:95,thumb:'⚛️',bg:'#001a2e',cat:'React'},
+    {title:'CSS Flexbox & Grid',provider:'Wes Bos',level:'Beginner',dur:'5h',rating:4.9,rev:'18k',price:'Free',match:93,thumb:'🎨',bg:'#0d1a0d',cat:'CSS'},
+    {title:'Node.js & Express',provider:'Traversy',level:'Intermediate',dur:'14h',rating:4.7,rev:'32k',price:'Free',match:90,thumb:'🖥️',bg:'#0a1a0a',cat:'Backend'},
+    {title:'Full-Stack Open 2024',provider:'Uni Helsinki',level:'Intermediate',dur:'120h',rating:4.9,rev:'41k',price:'Free',match:92,thumb:'🚀',bg:'#14001a',cat:'Full Stack'},
+  ],
+  ml:[
+    {title:'Machine Learning A-Z',provider:'Udemy',level:'Intermediate',dur:'44h',rating:4.5,rev:'87k',price:'₹499',match:99,thumb:'🤖',bg:'#001a1a',cat:'ML'},
+    {title:'Deep Learning Specialization',provider:'DeepLearning.AI',level:'Advanced',dur:'80h',rating:4.8,rev:'120k',price:'₹1,299',match:97,thumb:'🧠',bg:'#0a001a',cat:'Deep Learning'},
+    {title:'Practical ML with Python',provider:'Kaggle',level:'Beginner',dur:'8h',rating:4.7,rev:'29k',price:'Free',match:95,thumb:'🐍',bg:'#001a0a',cat:'Python'},
+    {title:'Fast.ai Practical Deep Learning',provider:'fast.ai',level:'Intermediate',dur:'28h',rating:4.9,rev:'38k',price:'Free',match:91,thumb:'⚡',bg:'#1a0a00',cat:'Deep Learning'},
+    {title:'TensorFlow Developer Certificate',provider:'Google',level:'Advanced',dur:'60h',rating:4.6,rev:'45k',price:'₹999',match:88,thumb:'🔷',bg:'#001433',cat:'TensorFlow'},
+  ],
+  data:[
+    {title:'Data Science & ML Bootcamp',provider:'Udemy',level:'Beginner',dur:'25h',rating:4.6,rev:'54k',price:'₹449',match:99,thumb:'📊',bg:'#001a1a',cat:'Data Science'},
+    {title:'Python for Data Science',provider:'IBM/Coursera',level:'Beginner',dur:'36h',rating:4.5,rev:'67k',price:'₹899',match:97,thumb:'🐍',bg:'#001a0a',cat:'Python'},
+    {title:'SQL for Data Analysis',provider:'Mode Analytics',level:'Beginner',dur:'6h',rating:4.7,rev:'28k',price:'Free',match:94,thumb:'🗄️',bg:'#1a0d00',cat:'SQL'},
+    {title:'Applied Data Science with Python',provider:'Michigan/Coursera',level:'Intermediate',dur:'60h',rating:4.5,rev:'48k',price:'₹1,199',match:90,thumb:'🔬',bg:'#001a14',cat:'Python'},
+    {title:'Statistics for Data Science',provider:'Khan Academy',level:'Beginner',dur:'20h',rating:4.8,rev:'90k',price:'Free',match:85,thumb:'📐',bg:'#14001a',cat:'Stats'},
+  ],
+  design:[
+    {title:'UI/UX Design Bootcamp',provider:'Udemy',level:'Beginner',dur:'38h',rating:4.7,rev:'42k',price:'₹499',match:99,thumb:'🎨',bg:'#0d1a1a',cat:'UI/UX'},
+    {title:'Figma for Designers',provider:'DesignCourse',level:'Beginner',dur:'12h',rating:4.8,rev:'31k',price:'Free',match:97,thumb:'🖌️',bg:'#1a0d14',cat:'Figma'},
+    {title:'Google UX Design Certificate',provider:'Google/Coursera',level:'Beginner',dur:'200h',rating:4.7,rev:'88k',price:'₹1,299',match:95,thumb:'🔍',bg:'#001433',cat:'UX'},
+    {title:'Design Systems with Figma',provider:'Egghead.io',level:'Intermediate',dur:'9h',rating:4.7,rev:'12k',price:'Free',match:88,thumb:'🧩',bg:'#1a1400',cat:'Design Systems'},
+  ],
+  mobile:[
+    {title:'Flutter & Dart — Complete Guide',provider:'Academind',level:'Beginner',dur:'42h',rating:4.7,rev:'36k',price:'₹499',match:99,thumb:'📱',bg:'#001a1a',cat:'Flutter'},
+    {title:'iOS & Swift Bootcamp',provider:'Angela Yu',level:'Beginner',dur:'55h',rating:4.8,rev:'68k',price:'₹499',match:96,thumb:'🍎',bg:'#0d0d1a',cat:'iOS'},
+    {title:'Android Kotlin Development',provider:'Google/Udacity',level:'Intermediate',dur:'60h',rating:4.6,rev:'42k',price:'Free',match:94,thumb:'🤖',bg:'#001a0d',cat:'Android'},
+    {title:'React Native — Practical Guide',provider:'Academind',level:'Intermediate',dur:'35h',rating:4.6,rev:'29k',price:'₹449',match:90,thumb:'⚛️',bg:'#001433',cat:'React Native'},
+  ],
+  cloud:[
+    {title:'Docker Mastery',provider:'Bret Fisher',level:'Beginner',dur:'20h',rating:4.8,rev:'48k',price:'₹499',match:99,thumb:'🐳',bg:'#001433',cat:'Docker'},
+    {title:'Kubernetes for Developers',provider:'KodeKloud',level:'Intermediate',dur:'30h',rating:4.7,rev:'22k',price:'₹799',match:96,thumb:'⚙️',bg:'#001a0a',cat:'Kubernetes'},
+    {title:'AWS Certified Cloud Practitioner',provider:'A Cloud Guru',level:'Beginner',dur:'40h',rating:4.6,rev:'68k',price:'₹1,199',match:94,thumb:'☁️',bg:'#1a0d00',cat:'AWS'},
+    {title:'GitHub Actions CI/CD',provider:'TechWorld with Nana',level:'Intermediate',dur:'8h',rating:4.7,rev:'18k',price:'Free',match:88,thumb:'🔁',bg:'#0d001a',cat:'CI/CD'},
+  ],
+  cyber:[
+    {title:'Complete Cyber Security Course',provider:'Nathan House',level:'Beginner',dur:'18h',rating:4.6,rev:'34k',price:'₹499',match:99,thumb:'🔐',bg:'#0d001a',cat:'Security'},
+    {title:'CompTIA Security+ Prep',provider:'Professor Messer',level:'Intermediate',dur:'40h',rating:4.7,rev:'22k',price:'Free',match:96,thumb:'🛡️',bg:'#001a0a',cat:'Certification'},
+    {title:'Ethical Hacking Bootcamp',provider:'TCM Security',level:'Intermediate',dur:'25h',rating:4.8,rev:'18k',price:'₹799',match:94,thumb:'🥷',bg:'#1a0000',cat:'Hacking'},
+    {title:'Web Application Security',provider:'OWASP',level:'Advanced',dur:'10h',rating:4.7,rev:'9k',price:'Free',match:88,thumb:'🌐',bg:'#001a1a',cat:'Web Security'},
+    {title:'TryHackMe Learning Path',provider:'TryHackMe',level:'Beginner',dur:'60h',rating:4.9,rev:'55k',price:'Free',match:97,thumb:'🧩',bg:'#1a1400',cat:'Practice'},
+  ],
+  python:[
+    {title:'Python for Everybody',provider:'Michigan/Coursera',level:'Beginner',dur:'30h',rating:4.8,rev:'185k',price:'Free',match:99,thumb:'🐍',bg:'#001a0a',cat:'Python'},
+    {title:'Automate the Boring Stuff',provider:'Al Sweigart (free)',level:'Beginner',dur:'15h',rating:4.9,rev:'70k',price:'Free',match:97,thumb:'🤖',bg:'#001a1a',cat:'Automation'},
+    {title:'Python OOP — Deep Dive',provider:'Udemy',level:'Intermediate',dur:'20h',rating:4.7,rev:'28k',price:'₹449',match:93,thumb:'🔷',bg:'#0a001a',cat:'OOP'},
+    {title:'Flask Mega Tutorial',provider:'Miguel Grinberg',level:'Intermediate',dur:'20h',rating:4.8,rev:'42k',price:'Free',match:90,thumb:'🌐',bg:'#1a0a00',cat:'Web'},
+  ],
+  general:[
+    {title:'Learning How to Learn',provider:'McMaster/Coursera',level:'Beginner',dur:'8h',rating:4.8,rev:'230k',price:'Free',match:99,thumb:'🧠',bg:'#001433',cat:'Productivity'},
+    {title:'Harvard CS50',provider:'Harvard',level:'Beginner',dur:'60h',rating:4.9,rev:'300k',price:'Free',match:97,thumb:'💻',bg:'#0d001a',cat:'CS Basics'},
+    {title:'Introduction to Programming',provider:'MIT OpenCourseWare',level:'Beginner',dur:'40h',rating:4.7,rev:'80k',price:'Free',match:93,thumb:'⚙️',bg:'#001a0a',cat:'Programming'},
+    {title:'Critical Thinking & Problem Solving',provider:'Michigan/Coursera',level:'Beginner',dur:'10h',rating:4.6,rev:'48k',price:'Free',match:88,thumb:'🎯',bg:'#1a0d00',cat:'Skills'},
+  ],
+};
+
+/* ═══════════════════════════════════
+   BUILD EVERYTHING
+═══════════════════════════════════ */
+function buildAll() {
+  const key = S.goalKey;
+  const rm = ROADMAPS[key] || ROADMAPS.general;
+
+  // Initialise milestones state (first 2 unlocked/active, rest locked)
+  S.milestones = rm.milestones.map((m, i) => ({
+    ...m,
+    status: i === 0 ? 'active' : 'locked',
+    completed: false,
+    idx: i,
+  }));
+  // Pre-complete first milestone for demo UX
+  S.milestones[0].status = 'done';
+  S.milestones[0].completed = true;
+  S.milestones[1].status = 'active';
+  S.completedMs = 1;
+  S.totalMs = S.milestones.length;
+
+  // Sidebar name
+  const initials = S.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'LP';
+  document.getElementById('sb-av').textContent = initials;
+  document.getElementById('sb-uname').textContent = S.name;
+  document.getElementById('sb-urole').textContent = rm.label;
+  document.getElementById('sb-course-ct').textContent = (COURSES[key] || COURSES.general).length;
+
+  buildRoadmap();
+  buildCourses();
+  // profile built lazily on open
+}
+
+/* ─── ROADMAP ─── */
+function buildRoadmap() {
+  const key = S.goalKey;
+  const rm = ROADMAPS[key] || ROADMAPS.general;
+  const done = S.milestones.filter(m => m.completed).length;
+  const total = S.milestones.length;
+  const pct = Math.round((done / total) * 100);
+
+  // Ring
+  const circ = 188.5;
+  const offset = circ - (circ * pct / 100);
+  document.getElementById('rm-ring-fg').style.strokeDashoffset = offset;
+  document.getElementById('rm-ring-pct').textContent = pct + '%';
+
+  // Hero
+  document.getElementById('rm-goal-name').textContent = rm.emoji + ' ' + rm.label;
+  document.getElementById('rm-meta').textContent = done + ' of ' + total + ' milestones complete';
+  document.getElementById('rm-tag-done').textContent = done + ' done';
+  document.getElementById('rm-tag-left').textContent = (total - done) + ' remaining';
+  document.getElementById('rm-prog-tag').textContent = pct + '%';
+
+  if (pct >= 100) {
+    document.getElementById('rm-tag-status').textContent = '🏆 Completed!';
+  }
+
+  // Timeline
+  const tl = document.getElementById('rm-timeline');
+  tl.innerHTML = S.milestones.map((m, i) => {
+    const dotCls = m.status === 'done' ? 'done' : m.status === 'active' ? 'active' : 'locked';
+    const cardCls = m.status === 'done' ? 'done-card' : m.status === 'active' ? 'active-card' : 'locked';
+    const dotIco = m.status === 'done' ? '✓' : m.status === 'active' ? '▶' : '🔒';
+    const actionBtn = m.status === 'locked'
+      ? `<button class="complete-btn done-btn">🔒 Locked</button>`
+      : m.completed
+        ? `<button class="complete-btn done-btn">✓ Done</button>`
+        : `<button class="complete-btn" onclick="completeMilestone(${i})">Mark Complete</button>`;
+    const skillTags = m.skills.map(s => `<span class="tag tag-teal" style="font-size:.68rem">${s}</span>`).join('');
+    return `
+      <div class="ms">
+        <div class="ms-dot ${dotCls}">${dotIco}</div>
+        <div class="ms-card ${cardCls}" onclick="selectMilestone(${i})">
+          <div class="ms-head">
+            <span class="ms-icon">${m.icon}</span>
+            <div style="flex:1">
+              <div class="ms-name">${m.title}</div>
+              <div class="ms-status ${m.status}">${
+                m.status === 'done' ? '✓ Completed' :
+                m.status === 'active' ? '▶ In Progress' : '🔒 Locked'
+              }</div>
+            </div>
+            <span class="tag tag-violet" style="font-size:.68rem">${m.dur}</span>
+          </div>
+          <div class="ms-desc">${m.desc}</div>
+          <div class="ms-footer">
+            <div class="ms-skills">${skillTags}</div>
+            <div class="ms-actions">${actionBtn}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Show resources for active milestone
+  const activeIdx = S.milestones.findIndex(m => m.status === 'active');
+  selectMilestone(activeIdx >= 0 ? activeIdx : 0);
+
+  // Mini stats
+  const durations = S.milestones.map(m => parseInt(m.dur));
+  const doneWeeks = S.milestones.filter(m => m.completed).reduce((a,m) => a + parseInt(m.dur), 0);
+  const totalWeeks = durations.reduce((a,b) => a+b, 0);
+  document.getElementById('rm-mini-stats').innerHTML = `
+    <div class="stat-card" data-ico="✅" style="padding:16px">
+      <div class="stat-label">Completed</div>
+      <div class="stat-val" style="font-size:1.6rem">${done}</div>
+      <div class="stat-sub">of ${total} milestones</div>
+    </div>
+    <div class="stat-card" data-ico="📅" style="padding:16px">
+      <div class="stat-label">Weeks Logged</div>
+      <div class="stat-val" style="font-size:1.6rem">${doneWeeks}</div>
+      <div class="stat-sub">of ~${totalWeeks} weeks</div>
+    </div>
+  `;
+}
+
+function selectMilestone(idx) {
+  const m = S.milestones[idx];
+  if (!m) return;
+  const res = m.resources || [];
+  document.getElementById('rm-resources').innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px">
+      <div style="font-size:.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">SELECTED MILESTONE</div>
+      <div style="font-weight:800;font-size:.9rem">${m.icon} ${m.title}</div>
+      <div style="font-size:.75rem;color:var(--muted);margin-top:2px">${m.dur} · ${m.skills.length} skills</div>
+    </div>
+    ${res.map(r => `
+      <div class="res-card" onclick="toast('▶ Opening: ${r.n}')">
+        <div class="res-icon">${r.t.split(' ')[0]}</div>
+        <div style="flex:1">
+          <div class="res-title">${r.n}</div>
+          <div class="res-meta">${r.t} · ${r.d} ${r.free ? '· 🆓 Free' : ''}</div>
+        </div>
+        <span style="color:var(--teal);font-size:.9rem">→</span>
+      </div>
+    `).join('')}
+  `;
+}
+
+function completeMilestone(idx) {
+  const ms = S.milestones;
+  if (!ms[idx] || ms[idx].completed || ms[idx].status === 'locked') return;
+  ms[idx].completed = true;
+  ms[idx].status = 'done';
+  S.completedMs++;
+  S.hoursLogged += Math.floor(Math.random() * 5) + 2;
+
+  // Unlock next
+  const next = ms.find((m, i) => i > idx && m.status === 'locked');
+  if (next) { next.status = 'active'; }
+
+  toast('🎉 Milestone "' + ms[idx].title + '" completed!');
+
+  // Check if all done
+  if (ms.every(m => m.completed)) {
+    setTimeout(() => toast('🏆 Amazing! You completed the entire roadmap!'), 800);
+  }
+
+  buildRoadmap();
+  // force profile rebuild if open
+}
+
+/* ─── COURSES ─── */
+function buildCourses() {
+  const list = COURSES[S.goalKey] || COURSES.general;
+  const cats = ['All', ...new Set(list.map(c => c.cat))];
+  document.getElementById('ap-courses-sub').textContent =
+    'Matched to your goal: ' + (ROADMAPS[S.goalKey]||ROADMAPS.general).label;
+
+  document.getElementById('cf-bar').innerHTML =
+    cats.map((c, i) => `<button class="cf-btn ${i===0?'on':''}" onclick="filterC(this,'${c}')">${c}</button>`).join('') +
+    `<button class="cf-btn" onclick="filterC(this,'free',true)">🆓 Free Only</button>`;
+
+  renderCourses(list);
+}
+
+function filterC(btn, cat, freeOnly) {
+  document.querySelectorAll('.cf-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  let list = COURSES[S.goalKey] || COURSES.general;
+  if (freeOnly) list = list.filter(c => c.price === 'Free');
+  else if (cat !== 'All') list = list.filter(c => c.cat === cat);
+  renderCourses(list);
+}
+
+function renderCourses(list) {
+  document.getElementById('cg').innerHTML = list.map(c => `
+    <div class="cc" onclick="toast('📚 Opening: ${c.title}')">
+      <div class="cc-thumb" style="background:${c.bg}">
+        ${c.thumb}
+        <div class="cc-badge">${c.match}% match</div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-prov">${c.provider}</div>
+        <div class="cc-title">${c.title}</div>
+        <div class="cc-meta">
+          <span>⏱ ${c.dur}</span>
+          <span class="cc-stars">★ ${c.rating}</span>
+          <span>(${c.rev})</span>
+        </div>
+        <div class="cc-foot">
+          <span class="cc-price ${c.price==='Free'?'free':''}">${c.price}</span>
+          <span class="cc-lv ${c.level==='Beginner'?'lv-b':c.level==='Advanced'?'lv-a':'lv-i'}">${c.level}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ─── PROFILE ─── */
+function buildProfile() {
+  const key = S.goalKey;
+  const rm = ROADMAPS[key] || ROADMAPS.general;
+  const done = S.milestones.filter(m => m.completed).length;
+  const total = S.milestones.length;
+  const pct = Math.round((done / total) * 100);
+  const initials = S.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2) || 'LP';
+
+  document.getElementById('pf-av').textContent = initials;
+  document.getElementById('pf-name').textContent = S.name;
+  document.getElementById('pf-sub').textContent = rm.label + ' · ' + S.goal.slice(0,60) + (S.goal.length>60?'…':'');
+
+  document.getElementById('pf-badges').innerHTML = [
+    {i:'🔥', t: S.streak + '-day streak'},
+    {i:'✅', t: done + ' milestones done'},
+    {i:'⏱️', t: S.hoursLogged + 'h logged'},
+    {i:'📚', t: (COURSES[key]||COURSES.general).length + ' courses ready'},
+  ].map(b => `<div class="pbadge">${b.i} ${b.t}</div>`).join('');
+
+  // KPI
+  document.getElementById('pf-kpi').innerHTML = [
+    {label:'Streak',      val: S.streak + 'd', sub:'Keep it up!', ico:'🔥'},
+    {label:'Goal Progress', val: pct + '%',    sub: done + ' of ' + total + ' done', ico:'🎯'},
+    {label:'Hours Learned', val: S.hoursLogged + 'h', sub:'Total logged', ico:'⏱️'},
+    {label:'Courses',      val: S.coursesEnrolled, sub:'In progress', ico:'📚'},
+  ].map(k => `
+    <div class="stat-card" data-ico="${k.ico}">
+      <div class="stat-label">${k.label}</div>
+      <div class="stat-val">${k.val}</div>
+      <div class="stat-sub">${k.sub}</div>
+    </div>
+  `).join('');
+
+  // Goal progress
+  document.getElementById('pf-goal-prog').innerHTML = `
+    <div class="goal-prog-card">
+      <div class="gpc-head">
+        <span style="font-size:1.3rem">${rm.emoji}</span>
+        <div class="gpc-title">${rm.label}</div>
+        <div class="gpc-pct">${pct}%</div>
+      </div>
+      <div class="progress-track" style="height:8px">
+        <div class="progress-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="gpc-meta">${done} of ${total} milestones · Est. ~${total - done} weeks left</div>
+    </div>
+    <div style="margin-top:16px">
+      ${S.milestones.map((m, i) => `
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:1.1rem">${m.icon}</span>
+          <span style="flex:1;font-size:.82rem;font-weight:${m.status==='active'?700:600};
+            color:${m.completed?'var(--teal)':m.status==='active'?'var(--text)':'var(--muted)'}">${m.title}</span>
+          <span style="font-size:.7rem;font-weight:700;
+            color:${m.completed?'var(--teal)':m.status==='active'?'var(--amber)':'var(--muted2)'}">
+            ${m.completed?'✓ Done':m.status==='active'?'▶ Active':'🔒 Locked'}
+          </span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // Skills (accumulated from completed milestones)
+  const allSkills = [];
+  S.milestones.filter(m => m.completed).forEach(m => m.skills.forEach(s => allSkills.push(s)));
+  const uniqueSkills = [...new Set(allSkills)].slice(0, 8);
+  const skillColors = ['','amber','rose','violet'];
+  document.getElementById('pf-skills').innerHTML = uniqueSkills.length
+    ? uniqueSkills.map((s, i) => `
+        <div class="skill-row">
+          <div class="skill-head">
+            <span class="skill-nm">${s}</span>
+            <span class="skill-pc">${Math.min(100, 50 + i * 8 + done * 5)}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill ${skillColors[i%skillColors.length]}" style="width:${Math.min(100, 50 + i*8 + done*5)}%"></div>
+          </div>
+        </div>
+      `).join('')
+    : '<div style="color:var(--muted);font-size:.85rem">Complete milestones to track skills.</div>';
+
+  // Activity bars
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const hrs  = [1.5, 2, 0.5, 2.5, 1, 3, 1.5];
+  const maxH = Math.max(...hrs);
+  const barsEl = document.getElementById('pf-act-bars');
+  const labsEl = document.getElementById('pf-act-lbls');
+  barsEl.innerHTML = hrs.map((h, i) =>
+    `<div class="act-b ${i===6?'today':''}" style="height:${(h/maxH)*100}%" title="${h}h on ${days[i]}"></div>`
+  ).join('');
+  labsEl.innerHTML = days.map(d =>
+    `<div style="flex:1;text-align:center;font-size:.62rem;color:var(--muted)">${d}</div>`
+  ).join('');
+
+  // Topic bars
+  const topics = S.milestones.filter(m => m.completed).slice(0, 5).map((m, i) => ({
+    name: m.title.split(' ').slice(0,2).join(' '),
+    pct: Math.min(95, 50 + i * 12),
+    col: ['var(--teal)','var(--amber)','var(--sky)','var(--violet)','var(--rose)'][i % 5]
+  }));
+  document.getElementById('pf-topic-bars').innerHTML = topics.length
+    ? topics.map(t => `
+        <div class="bar-row">
+          <div class="bar-lbl" style="font-size:.75rem;width:90px">${t.name}</div>
+          <div class="bar-out"><div class="bar-in" style="width:${t.pct}%;background:${t.col}"></div></div>
+          <div class="bar-val">${t.pct}%</div>
+        </div>
+      `).join('')
+    : '<div style="color:var(--muted);font-size:.84rem">No data yet — complete milestones.</div>';
+
+  // Heatmap
+  const hm = document.getElementById('pf-heatmap');
+  hm.innerHTML = '';
+  for (let r = 0; r < 7; r++) {
+    const row = document.createElement('div');
+    row.className = 'hm-row';
+    for (let c = 0; c < 12; c++) {
+      const cell = document.createElement('div');
+      const rnd = Math.random();
+      const lv = rnd < .3 ? '' : rnd < .5 ? 'l1' : rnd < .7 ? 'l2' : rnd < .88 ? 'l3' : 'l4';
+      cell.className = 'hm-c ' + lv;
+      row.appendChild(cell);
+    }
+    hm.appendChild(row);
+  }
+
+  // Achievements
+  const achvs = [
+    {i:'🔥', t:'Streak Starter', d:'7+ day learning streak', unlocked: S.streak >= 7},
+    {i:'🎯', t:'Goal Setter', d:'Created a personalised roadmap', unlocked: true},
+    {i:'✅', t:'First Step', d:'Completed first milestone', unlocked: done >= 1},
+    {i:'🚀', t:'Halfway There', d:'50% roadmap complete', unlocked: pct >= 50},
+    {i:'🏆', t:'Finisher', d:'100% roadmap complete', unlocked: pct >= 100},
+    {i:'📚', t:'Bookworm', d:'10+ courses explored', unlocked: S.coursesEnrolled >= 10},
+  ];
+  document.getElementById('pf-achv').innerHTML = achvs.map(a => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);
+      opacity:${a.unlocked?1:.4}">
+      <div style="width:36px;height:36px;border-radius:10px;
+        background:${a.unlocked?'rgba(0,212,170,.15)':'var(--surface)'};
+        display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">
+        ${a.i}
+      </div>
+      <div>
+        <div style="font-size:.84rem;font-weight:800;color:${a.unlocked?'var(--text)':'var(--muted)'}">${a.t}</div>
+        <div style="font-size:.74rem;color:var(--muted)">${a.d}</div>
+      </div>
+      ${a.unlocked ? '<span class="tag tag-teal" style="margin-left:auto">Earned</span>' : ''}
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════════════════════
+   LOADER & TOAST
+═══════════════════════════════════ */
+function showLoader(msg) {
+  document.getElementById('load-txt').textContent = msg || 'Loading…';
+  document.getElementById('loader').classList.add('on');
+}
+function hideLoader() { document.getElementById('loader').classList.remove('on'); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('on'), 2800);
+}
+</script>
+</body>
+</html>
